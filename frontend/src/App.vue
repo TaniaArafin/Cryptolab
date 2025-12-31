@@ -82,7 +82,7 @@ onMounted(() => {
           </button>
           <!-- GitHub Link -->
           <a
-            href="https://github.com"
+            href="https://github.com/TaniaArafin/Cryptolab"
             target="_blank"
             class="flex items-center gap-2 px-4 py-2 rounded-lg glass transition-all duration-300 hover:scale-105"
             :class="isDark ? 'text-dark-200 hover:text-white' : 'text-slate-600 hover:text-slate-800'"
