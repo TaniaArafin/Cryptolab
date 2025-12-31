@@ -81,23 +81,31 @@ cryptolab/
 - Node.js 18 or higher
 - npm or yarn
 
-### Backend Setup
+### Automatic Setup
+You can run the `init.bat` to start the application automatically.
+
+### Manual Setup
+
+### 1. Backend Setup
 
 ```bash
 # Navigate to backend directory
 cd backend
 
 # Create virtual environment
-python -m venv venv
+python -m venv .venv
 
 # Activate virtual environment
 # On macOS/Linux:
-source venv/bin/activate
+source .venv/bin/activate
+
 # On Windows:
-venv\Scripts\activate
+.venv\Scripts\activate
 
 # Install dependencies
-pip install -r requirements.txt
+python.exe -m pip install --upgrade pip     # If pip is not up-to-date
+pip install --only-binary=:all: pydantic    # Install pydantic binary separately
+pip install -r requirements.txt             # Install rest of the dependencies
 
 # Start the server
 uvicorn app.main:app --reload --port 8000
