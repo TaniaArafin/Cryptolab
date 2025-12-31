@@ -107,7 +107,7 @@ export interface HillCrackResponse {
   known_plaintext: string
   known_ciphertext: string
   used_window?: {
-    position: number
+    position: number | string
     plaintext: string
     ciphertext: string
   }
@@ -117,6 +117,7 @@ export interface HillCrackResponse {
     match: boolean
   }
   error?: string
+  method?: 'brute-force'
 }
 
 export type CipherType = 'caesar' | 'affine' | 'playfair' | 'hill' | 'cracker'

@@ -171,14 +171,14 @@ const getRuleColor = (rule: string) => {
         :disabled="loading || !inputText.trim() || !keyword.trim()"
         class="flex-1 bg-primary-600 hover:bg-primary-500 disabled:bg-dark-700 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-semibold transition-all duration-300"
       >
-        {{ loading ? 'Processing...' : '🔒 Encrypt' }}
+        {{ loading ? 'Processing...' : 'Encrypt' }}
       </button>
       <button
         @click="decrypt"
         :disabled="loading || !inputText.trim() || !keyword.trim()"
         class="flex-1 bg-accent-600 hover:bg-accent-500 disabled:bg-dark-700 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-semibold transition-all duration-300"
       >
-        {{ loading ? 'Processing...' : '🔓 Decrypt' }}
+        {{ loading ? 'Processing...' : 'Decrypt' }}
       </button>
     </div>
 

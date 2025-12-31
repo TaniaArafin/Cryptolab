@@ -43,6 +43,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Dark mode body (default) */
+.dark body,
 body {
   @apply bg-dark-950 text-dark-50 antialiased;
   margin: 0;
@@ -50,6 +52,13 @@ body {
   min-height: 100vh;
   background: linear-gradient(135deg, #010409 0%, #0f172a 50%, #020617 100%);
   background-attachment: fixed;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Light mode body */
+.light body {
+  @apply bg-slate-100 text-slate-900 antialiased;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
 }
 
 /* Animated gradient background */
@@ -65,12 +74,13 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* Glassmorphism card effect */
+/* Glassmorphism card effect - Dark mode */
 .glass {
   background: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.3s ease, border 0.3s ease;
 }
 
 .glass-light {
@@ -78,9 +88,21 @@ body {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.3s ease, border 0.3s ease;
 }
 
-/* Custom scrollbar */
+/* Glassmorphism - Light mode */
+.light .glass {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.light .glass-light {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Custom scrollbar - Dark mode */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -96,6 +118,19 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-primary-600;
+}
+
+/* Custom scrollbar - Light mode */
+.light ::-webkit-scrollbar-track {
+  @apply bg-slate-200;
+}
+
+.light ::-webkit-scrollbar-thumb {
+  @apply bg-slate-400;
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary-500;
 }
 
 /* Input focus styles with glow */
@@ -186,4 +221,299 @@ input:focus, textarea:focus, select:focus {
 ::selection {
   background: rgba(6, 182, 212, 0.3);
   color: #fff;
+}
+
+/* ==================== */
+/* Light Mode Overrides */
+/* ==================== */
+
+/* Light mode selection */
+.light ::selection {
+  background: rgba(6, 182, 212, 0.4);
+  color: #1e293b;
+}
+
+/* Light mode card hover */
+.light .card-hover:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Light mode button hover */
+.light .btn-hover:hover {
+  box-shadow: 0 8px 25px rgba(6, 182, 212, 0.15);
+}
+
+/* Light mode shimmer */
+.light .shimmer {
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.05), transparent);
+}
+
+/* Light mode matrix cell */
+.light .matrix-cell:hover {
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+}
+
+/* Light mode pulse glow */
+.light .pulse-glow {
+  animation: pulse-glow-light 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow-light {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(6, 182, 212, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.5), 0 0 30px rgba(168, 85, 247, 0.2);
+  }
+}
+
+/* Light mode input focus */
+.light input:focus,
+.light textarea:focus,
+.light select:focus {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+}
+
+/* ================================ */
+/* Light Mode Text & Input Overrides */
+/* ================================ */
+
+/* Override dark text colors in light mode - DARKER shades for better visibility */
+.light .text-white {
+  color: #0f172a !important; /* slate-900 - darkest */
+}
+
+.light .text-dark-50 {
+  color: #1e293b !important; /* slate-800 */
+}
+
+.light .text-dark-100 {
+  color: #1e293b !important; /* slate-800 */
+}
+
+.light .text-dark-200 {
+  color: #334155 !important; /* slate-700 */
+}
+
+.light .text-dark-300 {
+  color: #475569 !important; /* slate-600 */
+}
+
+.light .text-dark-400 {
+  color: #475569 !important; /* slate-600 */
+}
+
+.light .text-dark-500 {
+  color: #64748b !important; /* slate-500 */
+}
+
+/* Light mode input and textarea styling */
+.light input,
+.light textarea,
+.light select {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  color: #0f172a !important; /* slate-900 - darker */
+  border-color: #94a3b8 !important; /* slate-400 - darker border */
+}
+
+.light input:focus,
+.light textarea:focus,
+.light select:focus {
+  border-color: #0891b2 !important; /* primary-600 - darker */
+}
+
+/* Light mode placeholder colors */
+.light input::placeholder,
+.light textarea::placeholder {
+  color: #64748b !important; /* slate-500 - darker */
+  opacity: 1;
+}
+
+/* Light mode background overrides */
+.light .bg-dark-700,
+.light .bg-dark-700\/50 {
+  background-color: rgba(241, 245, 249, 0.8) !important; /* slate-100 */
+}
+
+.light .bg-dark-800,
+.light .bg-dark-800\/50 {
+  background-color: rgba(248, 250, 252, 0.9) !important; /* slate-50 */
+}
+
+.light .bg-dark-900 {
+  background-color: #f1f5f9 !important; /* slate-100 */
+}
+
+/* Light mode border overrides - darker borders */
+.light .border-dark-600 {
+  border-color: #94a3b8 !important; /* slate-400 - darker */
+}
+
+.light .border-dark-700 {
+  border-color: #cbd5e1 !important; /* slate-300 - darker */
+}
+
+/* Light mode hover states for buttons */
+.light .hover\:bg-dark-700:hover {
+  background-color: #e2e8f0 !important;
+}
+
+.light .hover\:text-white:hover {
+  color: #0f172a !important; /* slate-900 */
+}
+
+/* Light mode result/output boxes */
+.light .border-primary-500\/20 {
+  border-color: rgba(6, 182, 212, 0.3) !important;
+}
+
+/* Light mode step breakdown */
+.light .bg-dark-800\/50 {
+  background-color: rgba(241, 245, 249, 0.9) !important;
+}
+
+/* Light mode range input */
+.light input[type="range"] {
+  background-color: #e2e8f0 !important;
+}
+
+/* Light mode error states */
+.light .bg-red-900\/30 {
+  background-color: rgba(254, 226, 226, 0.8) !important;
+}
+
+.light .text-red-300 {
+  color: #dc2626 !important;
+}
+
+.light .border-red-500\/50 {
+  border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+/* Light mode success states */
+.light .bg-green-500\/10 {
+  background-color: rgba(220, 252, 231, 0.8) !important;
+}
+
+.light .text-green-400 {
+  color: #16a34a !important;
+}
+
+.light .border-green-500\/30 {
+  border-color: rgba(34, 197, 94, 0.4) !important;
+}
+
+/* Light mode info/warning states */
+.light .bg-orange-500\/10 {
+  background-color: rgba(255, 237, 213, 0.8) !important;
+}
+
+.light .text-orange-300,
+.light .text-orange-400 {
+  color: #ea580c !important;
+}
+
+.light .border-orange-500\/30 {
+  border-color: rgba(249, 115, 22, 0.4) !important;
+}
+
+.light .bg-blue-500\/10 {
+  background-color: rgba(219, 234, 254, 0.8) !important;
+}
+
+.light .text-blue-300,
+.light .text-blue-400 {
+  color: #2563eb !important;
+}
+
+.light .border-blue-500\/30 {
+  border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+/* Light mode yellow (for warnings/info) */
+.light .text-yellow-400 {
+  color: #ca8a04 !important;
+}
+
+/* Light mode disabled button states */
+.light .disabled\:bg-dark-700:disabled {
+  background-color: #e2e8f0 !important;
+  color: #94a3b8 !important;
+}
+
+/* ================================ */
+/* Light Mode Button Fixes */
+/* ================================ */
+
+/* Keep white text on colored primary/accent buttons in light mode */
+.light .bg-primary-600.text-white,
+.light .bg-primary-500.text-white,
+.light .bg-accent-600.text-white,
+.light .bg-accent-500.text-white {
+  color: #ffffff !important;
+}
+
+/* Secondary/utility buttons in light mode */
+.light .bg-dark-700\/50 {
+  background-color: rgba(241, 245, 249, 0.9) !important;
+  border-color: #cbd5e1 !important;
+}
+
+.light .bg-dark-700\/50:hover {
+  background-color: rgba(6, 182, 212, 0.1) !important;
+}
+
+/* Copy button and similar utility buttons */
+.light .bg-dark-700\/50.text-primary-400 {
+  color: #0891b2 !important;
+}
+
+/* Hover states for primary-tinted buttons */
+.light .hover\:bg-primary-600\/20:hover {
+  background-color: rgba(6, 182, 212, 0.15) !important;
+}
+
+/* Font mono text in light mode (for results) */
+.light .font-mono.text-primary-400 {
+  color: #0e7490 !important; /* primary-700 - darker */
+}
+
+/* ================================ */
+/* Light Mode - Darker Color Shades */
+/* ================================ */
+
+/* Primary colors - use darker shades (600/700 instead of 400/500) */
+.light .text-primary-400 {
+  color: #0891b2 !important; /* primary-600 */
+}
+
+.light .text-primary-500 {
+  color: #0e7490 !important; /* primary-700 */
+}
+
+/* Accent colors - use darker shades */
+.light .text-accent-400 {
+  color: #9333ea !important; /* accent-600 */
+}
+
+.light .text-accent-500 {
+  color: #7c3aed !important; /* violet-600 */
+}
+
+/* Blue colors - use darker shades */
+.light .text-blue-400 {
+  color: #2563eb !important; /* blue-600 */
+}
+
+.light .text-blue-500 {
+  color: #1d4ed8 !important; /* blue-700 */
+}
+
+/* Summary/details text - darker */
+.light summary {
+  color: #475569 !important; /* slate-600 */
+}
+
+.light summary:hover {
+  color: #0891b2 !important; /* primary-600 */
 }

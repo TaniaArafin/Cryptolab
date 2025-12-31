@@ -3,7 +3,6 @@ Mathematical utility functions for cryptographic operations.
 Includes modular arithmetic and matrix operations.
 """
 
-import numpy as np
 from typing import Optional, Tuple, List
 
 

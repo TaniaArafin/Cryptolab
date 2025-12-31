@@ -86,10 +86,10 @@ const decrypt = async () => {
 }
 
 const generateRandomMatrix = () => {
-  // Generate random valid matrix
+  // Generate random valid matrix (all must be invertible mod 26)
   const validMatrices = [
     [[3, 3], [2, 5]],
-    [[6, 24], [1, 13]],
+    [[6, 1], [1, 3]],
     [[5, 8], [17, 3]],
     [[9, 4], [5, 7]],
     [[3, 5], [2, 7]],
@@ -111,7 +111,7 @@ const copyResult = () => {
 // Example data - matrices must be invertible mod 26
 const examples = [
   { text: 'HELP', matrix: [[3, 3], [2, 5]] },
-  { text: 'SHORT', matrix: [[6, 24], [1, 13]] },
+  { text: 'SHORT', matrix: [[6, 1], [1, 3]] },
   { text: 'ATTACK', matrix: [[5, 8], [17, 3]] },
   { text: 'CIPHER', matrix: [[9, 4], [5, 7]] },
   { text: 'MATRIX', matrix: [[3, 5], [2, 7]] }
@@ -259,7 +259,7 @@ const loadExample = () => {
         placeholder="Enter text to encrypt or decrypt..."
         class="w-full bg-dark-800/50 text-white p-4 rounded-xl border border-dark-600 focus:border-primary-500 resize-none h-32 font-mono transition-all duration-200"
       ></textarea>
-      <p class="text-dark-500 text-sm">Note: Odd-length text will be padded with 'X'</p>
+      <p class="text-dark-500 text-sm">Note: Odd-length text will be padded with 'X'. Spaces and non-letters are removed.</p>
     </div>
 
     <!-- Action Buttons -->
@@ -269,14 +269,14 @@ const loadExample = () => {
         :disabled="loading || !inputText.trim() || !isValidMatrix"
         class="flex-1 bg-primary-600 hover:bg-primary-500 disabled:bg-dark-700 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-semibold transition-all duration-300"
       >
-        {{ loading ? 'Processing...' : '🔒 Encrypt' }}
+        {{ loading ? 'Processing...' : ' Encrypt' }}
       </button>
       <button
         @click="decrypt"
         :disabled="loading || !inputText.trim() || !isValidMatrix"
         class="flex-1 bg-accent-600 hover:bg-accent-500 disabled:bg-dark-700 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-semibold transition-all duration-300"
       >
-        {{ loading ? 'Processing...' : '🔓 Decrypt' }}
+        {{ loading ? 'Processing...' : 'Decrypt' }}
       </button>
     </div>
 
@@ -304,13 +304,24 @@ const loadExample = () => {
         <p class="text-2xl font-mono text-primary-400 break-all">{{ result.result }}</p>
       </div>
 
+      <!-- Padding explanation -->
+      <div v-if="result.operation === 'encrypt' && result.prepared_text !== inputText.toUpperCase().replace(/[^A-Z]/g, '')"
+           class="bg-blue-900/20 border border-blue-500/30 rounded-xl p-4 text-blue-300 text-sm">
+        <p><strong>Note:</strong> Your input "{{ inputText.toUpperCase().replace(/[^A-Z]/g, '') }}" was padded to "{{ result.prepared_text }}" (added 'X' to make even length for 2x2 matrix multiplication).</p>
+      </div>
+
+      <div v-if="result.operation === 'decrypt'"
+           class="bg-amber-900/20 border border-amber-500/30 rounded-xl p-4 text-amber-300 text-sm">
+        <p><strong>Note:</strong> If the original plaintext had odd length, it was padded with 'X' before encryption. The trailing 'X' in the result may be padding, not part of the original message.</p>
+      </div>
+
       <!-- Steps -->
       <details class="mt-4 group">
         <summary class="cursor-pointer text-dark-400 hover:text-primary-400 transition-colors flex items-center gap-2">
           <span class="group-open:rotate-90 transition-transform">▶</span>
           Show step-by-step breakdown
         </summary>
-        <div class="mt-4 space-y-3 max-h-64 overflow-y-auto">
+        <div class="mt-4 space-y-3 max-h-auto overflow-y-auto">
           <div
             v-for="(step, i) in result.steps"
             :key="i"

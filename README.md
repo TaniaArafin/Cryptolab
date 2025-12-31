@@ -215,3 +215,7 @@ The frontend will be available at `http://localhost:5173`
 
 - Built with assistance from Claude AI (Anthropic)
 - Mathematical algorithms implemented based on classical cryptography literature
+
+## License
+
+MIT License

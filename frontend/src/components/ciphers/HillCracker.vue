@@ -45,11 +45,13 @@ const testKey = async () => {
 
 // Example data - pairs encrypted with known matrices
 const examples = [
-  { plaintext: 'HELP', ciphertext: 'HIAT' },
-  { plaintext: 'SHORT', ciphertext: 'CLKRY' },
-  { plaintext: 'ATTACK', ciphertext: 'ZKKZHK' },
-  { plaintext: 'CIPHER', ciphertext: 'KAZIGJ' },
-  { plaintext: 'MATRIX', ciphertext: 'YJFRSX' }
+  { plaintext: 'HELP', ciphertext: 'HIAT' },           // Key: [[3, 3], [2, 5]]
+  { plaintext: 'SHORTX', ciphertext: 'LNXNHK' },       // Key: [[6, 1], [1, 3]] - padded
+  { plaintext: 'ATTACK', ciphertext: 'WFRLMM' },       // Key: [[5, 8], [17, 3]]
+  { plaintext: 'CIPHER', ciphertext: 'YOHUAJ' },       // Key: [[9, 4], [5, 7]]
+  { plaintext: 'MATRIX', ciphertext: 'KYMBJV' },       // Key: [[3, 5], [2, 7]]
+  { plaintext: 'CRYPTO', ciphertext: 'FLNTVE' },       // Key: [[3, 3], [2, 5]] - first pos fails, second works
+  { plaintext: 'SAMIHAMAISHAJEBA', ciphertext: 'CKIMVOKYACVONMDC' }  // Key: [[3, 3], [2, 5]] - requires brute-force
 ]
 
 const loadExample = () => {
@@ -202,14 +204,13 @@ const validationData = computed(() => {
         :disabled="loading || knownPlaintext.length < 4 || knownCiphertext.length < 4"
         class="flex-1 bg-purple-600 hover:bg-purple-500 disabled:bg-dark-700 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-semibold transition-all duration-300"
       >
-        {{ loading ? 'Cracking...' : '🔓 Crack Key' }}
+        {{ loading ? 'Cracking...' : 'Crack Key' }}
       </button>
     </div>
 
     <!-- Error -->
     <div v-if="error" class="bg-red-900/30 border border-red-500/50 rounded-xl p-4">
       <div class="flex items-center gap-3">
-        <span class="text-xl">⚠️</span>
         <p class="text-red-300">{{ error }}</p>
       </div>
       <p v-if="error.includes('not invertible') || error.includes('No invertible')" class="text-red-400/70 text-sm mt-2 ml-8">
@@ -225,8 +226,6 @@ const validationData = computed(() => {
         class="glass border rounded-xl p-6"
       >
         <div class="flex items-center gap-3 mb-4">
-          <span v-if="result.success" class="text-3xl">✅</span>
-          <span v-else class="text-3xl">❌</span>
           <h3 class="text-xl font-bold" :class="result.success ? 'text-green-400' : 'text-red-400'">
             {{ result.success ? 'Key Successfully Recovered!' : 'Failed to Recover Key' }}
           </h3>
@@ -397,30 +396,30 @@ const validationData = computed(() => {
       </div>
 
       <!-- Full Verification -->
-      <div v-if="result.verification" class="glass rounded-xl p-6">
+      <div v-if="result.verification" class="glass rounded-xl p-6 overflow-hidden">
         <h3 class="text-lg font-semibold text-white mb-4">Full Text Verification</h3>
-        <div class="bg-dark-800/50 p-4 rounded-xl border border-dark-600">
-          <div class="grid md:grid-cols-3 gap-4 text-center">
-            <div>
+        <div class="bg-dark-800/50 p-4 rounded-xl border border-dark-600 overflow-hidden">
+          <div class="flex flex-col md:flex-row items-center gap-4 text-center">
+            <div class="flex-1 min-w-0 w-full">
               <p class="text-dark-500 text-xs mb-1">Input Plaintext</p>
-              <p class="font-mono text-yellow-400 text-lg">{{ result.known_plaintext }}</p>
+              <p class="font-mono text-yellow-400 text-sm md:text-base break-all">{{ result.known_plaintext }}</p>
             </div>
-            <div class="flex items-center justify-center">
+            <div class="flex-shrink-0">
               <div class="text-dark-500">
                 <p class="text-xs mb-1">Encrypt with K</p>
                 <span class="text-2xl text-primary-400">→</span>
               </div>
             </div>
-            <div>
+            <div class="flex-1 min-w-0 w-full">
               <p class="text-dark-500 text-xs mb-1">Output Ciphertext</p>
-              <p class="font-mono text-lg" :class="result.verification.match ? 'text-green-400' : 'text-red-400'">
+              <p class="font-mono text-sm md:text-base break-all" :class="result.verification.match ? 'text-green-400' : 'text-red-400'">
                 {{ result.verification.encrypted }}
               </p>
             </div>
           </div>
-          <div class="mt-4 pt-4 border-t border-dark-600 text-center">
-            <p class="text-dark-400 text-sm">
-              Expected: <span class="font-mono text-white">{{ result.verification.expected }}</span>
+          <div class="mt-4 pt-4 border-t border-dark-600 text-center overflow-hidden">
+            <p class="text-dark-400 text-sm break-all">
+              Expected: <span class="font-mono text-white break-all">{{ result.verification.expected }}</span>
               <span v-if="result.verification.match" class="text-green-400 ml-2">✓ Match!</span>
               <span v-else class="text-red-400 ml-2">✗ Mismatch</span>
             </p>
@@ -428,8 +427,17 @@ const validationData = computed(() => {
         </div>
       </div>
 
+      <!-- Brute-Force Method Indicator -->
+      <div v-if="result.method === 'brute-force'" class="glass rounded-xl p-4 border border-orange-500/30 bg-orange-500/10">
+        <p class="text-orange-300 text-sm flex items-center gap-2">
+          <span class="text-orange-400">⚡</span>
+          <span class="font-semibold">Brute-force method used:</span>
+          Matrix inversion failed for all positions. Key was found by exhaustive search through all valid matrices.
+        </p>
+      </div>
+
       <!-- Used Window Info -->
-      <div v-if="result.used_window" class="glass rounded-xl p-4 border border-blue-500/30">
+      <div v-if="result.used_window && result.method !== 'brute-force'" class="glass rounded-xl p-4 border border-blue-500/30">
         <p class="text-blue-300 text-sm flex items-center gap-2">
           <span class="text-blue-400">ℹ️</span>
           <span class="font-semibold">Characters used for key recovery:</span>

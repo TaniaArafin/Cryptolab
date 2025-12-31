@@ -180,14 +180,14 @@ const loadExample = () => {
         :disabled="loading || !inputText.trim()"
         class="flex-1 bg-primary-600 hover:bg-primary-500 disabled:bg-dark-700 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-semibold transition-all duration-300"
       >
-        {{ loading ? 'Processing...' : '🔒 Encrypt' }}
+        {{ loading ? 'Processing...' : 'Encrypt' }}
       </button>
       <button
         @click="decrypt"
         :disabled="loading || !inputText.trim()"
         class="flex-1 bg-accent-600 hover:bg-accent-500 disabled:bg-dark-700 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-semibold transition-all duration-300"
       >
-        {{ loading ? 'Processing...' : '🔓 Decrypt' }}
+        {{ loading ? 'Processing...' : 'Decrypt' }}
       </button>
     </div>
 
@@ -208,7 +208,7 @@ const loadExample = () => {
           @click="copyResult"
           class="px-3 py-1.5 rounded-lg bg-dark-700/50 hover:bg-primary-600/20 text-primary-400 hover:text-primary-300 flex items-center gap-2 transition-all duration-200 text-sm"
         >
-          {{ copied ? '✓ Copied!' : '📋 Copy' }}
+          {{ copied ? '✓ Copied!' : 'Copy' }}
         </button>
       </div>
       <div class="bg-dark-800/50 p-5 rounded-xl border border-primary-500/20">
